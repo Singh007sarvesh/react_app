@@ -1,0 +1,19 @@
+.footer-box{
+	background: #292f35;
+    padding: 20px 0;
+    width: 100%;
+    height: 67px;
+}
+.footer-box .footer-company-name{
+	text-align: center;
+	margin: 0px;
+    color: #ffffff;
+    font-size: 15px;
+}
+
+.footer-box .footer-company-name a{
+	color: #881228;
+}
+.footer-box .footer-company-name a:hover{
+	color: #63c7bd;
+}
