@@ -9,6 +9,8 @@ from database import Database
 import cv2
 import numpy as np
 from flask_json import FlaskJSON, JsonError, json_response, as_json
+from flask import jsonify, abort
+from flask_restful import Resource, Api 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 app.config['SECRET_KEY'] = 'the quick brown fox jumps over the lazy   dog'
@@ -17,6 +19,35 @@ FlaskJSON(app)
 app.config["IMAGE_UPLOADS"] = "image"
 app.config["ALLOWED_IMAGE_EXTENSIONS"] = ["JPEG", "JPG", "PNG", "GIF"]
 
+
+def get_paginated_list(results, url, start, limit):
+    start = int(start)
+    limit = int(limit)
+    count = len(results)
+    if count < start or limit < 0:
+        abort(404)
+    # make response
+    obj = {}
+    obj['start'] = start
+    obj['limit'] = limit
+    obj['count'] = count
+    # make URLs
+    # make previous url
+    if start == 1:
+        obj['previous'] = ''
+    else:
+        start_copy = max(1, start - limit)
+        limit_copy = start - 1
+        obj['previous'] = url + '?start=%d&limit=%d' % (start_copy, limit_copy)
+    # make next url
+    if start + limit > count:
+        obj['next'] = ''
+    else:
+        start_copy = start + limit
+        obj['next'] = url + '?start=%d&limit=%d' % (start_copy, limit)
+    # finally extract result according to bounds
+    obj['results'] = results[(start - 1):(start - 1 + limit)]
+    return obj
 
 @app.route('/api/heackerearth/restaurants/<string:data>', methods=['GET'])
 def search_by_rest_id(data):
@@ -79,7 +110,12 @@ def restaurant():
             content = {}
             content = {'restaurantId': result[0], 'restaurantName': result[1]}
             payload.append(content)
-        return jsonify(payload)
+        return jsonify(get_paginated_list(
+        payload, 
+        '/api/heackerearth/restaurants', 
+        start=request.args.get('start', 1), 
+        limit=request.args.get('limit', 20)
+    ))
 
 
 @app.route('/api/hackerearth/restaurants/sort', methods=['POST'])

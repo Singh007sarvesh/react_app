@@ -1,0 +1,11 @@
+--2020-02-09 11:32:53--  https://en.wikipedia.org/w/api.php?action=parse
+Resolving en.wikipedia.org (en.wikipedia.org)... 103.102.166.224, 2001:df2:e500:ed1a::1
+Connecting to en.wikipedia.org (en.wikipedia.org)|103.102.166.224|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+Saving to: ‘api.php?action=parse’
+
+api.php?action=parse                    [<=>                                                               ]       0  --.-KB/s               api.php?action=parse                    [ <=>                                                              ]   8.48K  31.1KB/s               api.php?action=parse                    [  <=>                                                             ]   8.48K  31.1KB/s    in 0.3s    
+
+2020-02-09 11:33:02 (31.1 KB/s) - ‘api.php?action=parse’ saved [8688]
+
