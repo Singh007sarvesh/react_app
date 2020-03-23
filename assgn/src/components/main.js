@@ -17,8 +17,7 @@ class Main extends React.Component{
             activePage: 1,
             itemsCountPerPage:0,
             totalItemsCount:0,
-            next:'',
-            previous:'',
+            start:0
         }
     }
     handlePageChange = (pageNumber) =>{
@@ -33,13 +32,13 @@ class Main extends React.Component{
                     restaurant:response.data['results'],
                     totalItemsCount:response.data.count,
                     itemsCountPerPage:response.data.limit,
+                    start:response.data.start
                 })
             }).catch((err)=>{
                 console.log("Pls")
         })
         }
         else{
-            console.log(pageNumber)
             let temp = 1;
             if (temp+this.state.itemsCountPerPage*(pageNumber-1)<this.state.totalItemsCount){
                 console.log(temp+this.state.itemsCountPerPage*(pageNumber-1))
@@ -52,15 +51,14 @@ class Main extends React.Component{
                         restaurant:response.data['results'],
                         totalItemsCount:response.data.count,
                         itemsCountPerPage:response.data.limit,
+                        start:response.data.start
                     })
                 }).catch((err)=>{
                     console.log("Pls")
             })
         }
         else{
-            console.log('6666666')
-            temp=20;
-            getResaurant(1,this.state.itemsCountPerPage
+            getResaurant(this.state.start,this.state.itemsCountPerPage
         ).then((response)=>{
                 // console.log('#############')
                 console.log(response.data['results'])
