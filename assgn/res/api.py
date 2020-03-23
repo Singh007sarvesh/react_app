@@ -110,12 +110,14 @@ def restaurant():
             content = {}
             content = {'restaurantId': result[0], 'restaurantName': result[1]}
             payload.append(content)
+        # return jsonify(payload)
         return jsonify(get_paginated_list(
         payload, 
         '/api/heackerearth/restaurants', 
         start=request.args.get('start', 1), 
         limit=request.args.get('limit', 20)
     ))
+
 
 
 @app.route('/api/hackerearth/restaurants/sort', methods=['POST'])

@@ -1,14 +1,20 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
 import {getResaurantDetailByName} from '../core/apiClient';
+import Pagination from "react-js-pagination";
 
 
 export default class Search extends React.Component{
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {
-            query:''
+            query:'',
+            activePage: 1,
         }
+    }
+    handlePageChange = (pageNumber) =>{
+        console.log(`active page is ${pageNumber}`);
+        this.setState({activePage: pageNumber});
     }
     componentDidMount(){
         // setTimeout(
@@ -39,10 +45,13 @@ export default class Search extends React.Component{
         console.log(this.state.query);
         return(
             <div>
-                <h1>Search</h1>
-                {/* <Link to={{pathname: `/${'restaurantdetails/'+'abs'}`, query: {}}}>
-                                <p>abs</p>
-                            </Link> */}
+                <Pagination
+          activePage={this.state.activePage}
+          itemsCountPerPage={10}
+          totalItemsCount={450}
+          pageRangeDisplayed={5}
+          onChange={this.handlePageChange}
+        />
             </div>
             
         )

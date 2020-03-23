@@ -6,15 +6,22 @@ const instance = axios.create({
     headers: {'Content-Type': 'application/json', 'Cache-Control': 'no-cache'}
 });
 
-export const getResaurant = function getResaurant(){
-    return instance.get('/api/heackerearth/restaurants');
+export const getResaurant = function getResaurant(param1, param2){
+    console.log('@@@@@@@@@@@@@@@@@@@@@@@@')
+    console.log(param1)
+    if (param1 == ''){
+        return instance.get('/api/heackerearth/restaurants');
+    }
+    else{
+        return instance.get('/api/heackerearth/restaurants?start='+param1+'&limit='+param2);
+    }
+    
 }
 export const cuisine = function cuisine(param){
     return instance.post('/api/heackerearth/cuisines/searches', param);
 }
 
 export const getResaurantDetailByName = function getResaurantDetailByName(param){
-    console.log(param)
     return instance.get('/api/heackerearth/restaurants/' +param+'');
 }
 export const getResaurantDetail = function getResaurantDetail(param){

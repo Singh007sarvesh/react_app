@@ -5,22 +5,86 @@ import '../stylesheets/main.css'
 import  { Redirect,withRouter } from 'react-router-dom'
 import { connect } from 'react-redux';
 import {getResaurantName, sortBasedOnKey} from '../core/apiClient';
+import Pagination from "react-js-pagination";
 
 class Main extends React.Component{
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {
             restaurant:[],
             flag:false,
             restaurantName:'',
+            activePage: 1,
+            itemsCountPerPage:0,
+            totalItemsCount:0,
+            next:'',
+            previous:'',
         }
+    }
+    handlePageChange = (pageNumber) =>{
+        console.log(`active page is ${pageNumber}`);
+        this.setState({activePage: pageNumber});
+        let that = this;
+        if (pageNumber == 1){
+        getResaurant(pageNumber, this.state.itemsCountPerPage
+            ).then((response)=>{
+                console.log(response.data)
+                that.setState({
+                    restaurant:response.data['results'],
+                    totalItemsCount:response.data.count,
+                    itemsCountPerPage:response.data.limit,
+                })
+            }).catch((err)=>{
+                console.log("Pls")
+        })
+        }
+        else{
+            console.log(pageNumber)
+            let temp = 1;
+            if (temp+this.state.itemsCountPerPage*(pageNumber-1)<this.state.totalItemsCount){
+                console.log(temp+this.state.itemsCountPerPage*(pageNumber-1))
+                console.log(this.state.totalItemsCount)
+                console.log(this.state.itemsCountPerPage)
+            getResaurant(temp+this.state.itemsCountPerPage*(pageNumber-1), this.state.itemsCountPerPage
+                ).then((response)=>{
+                    console.log(response.data)
+                    that.setState({
+                        restaurant:response.data['results'],
+                        totalItemsCount:response.data.count,
+                        itemsCountPerPage:response.data.limit,
+                    })
+                }).catch((err)=>{
+                    console.log("Pls")
+            })
+        }
+        else{
+            console.log('6666666')
+            temp=20;
+            getResaurant(1,this.state.itemsCountPerPage
+        ).then((response)=>{
+                // console.log('#############')
+                console.log(response.data['results'])
+                that.setState({
+                    restaurant:response.data['results'],
+                    totalItemsCount:response.data.count,
+                    itemsCountPerPage:response.data.limit,
+                })
+            }).catch((err)=>{
+                console.log("Pls")
+        })
+        }
+    }
     }
     componentDidMount(){
         let that = this;
-        getResaurant(
-            ).then((response)=>{
+        getResaurant('', ''
+        ).then((response)=>{
+                // console.log('#############')
+                console.log(response.data)
                 that.setState({
-                    restaurant:response.data
+                    restaurant:response.data['results'],
+                    totalItemsCount:response.data.count,
+                    itemsCountPerPage:response.data.limit,
                 })
             }).catch((err)=>{
                 console.log("Pls")
@@ -64,6 +128,15 @@ class Main extends React.Component{
                    ))
                 // <h1>Hello</h1>
                 }
+            </div>
+            <div>
+            <Pagination
+          activePage={this.state.activePage}
+          itemsCountPerPage={this.state.itemsCountPerPage}
+          totalItemsCount={this.state.totalItemsCount}
+        //   pageRangeDisplayed={7}
+          onChange={this.handlePageChange}
+        />
             </div>
             </div>
         )
